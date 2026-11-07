@@ -3,6 +3,9 @@ name: Generate Reel
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -24,8 +27,11 @@ jobs:
       - name: Generate Reel Video
         run: python make_reel.py
 
-      - name: Upload Video
-        uses: actions/upload-artifact@v4
+      - name: Release MP4 Directly
+        uses: softprops/action-gh-release@v1
         with:
-          name: ugc-promo-reel
-          path: learnthrill_promo_reel.mp4
+          tag_name: latest-reel
+          name: Latest UGC Reel
+          files: learnthrill_promo_reel.mp4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
