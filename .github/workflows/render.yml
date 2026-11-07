@@ -1,0 +1,32 @@
+name: Generate Reel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Tools & Audio Packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg imagemagick fonts-dejavu-core
+          sudo sed -i 's/<policy domain="path" rights="none" pattern="@\*"/<policy domain="path" rights="read|write" pattern="@\*"/' /etc/ImageMagick-6/policy.xml
+          pip install moviepy Pillow edge-tts
+
+      - name: Create Video
+        run: python make_reel.py
+
+      - name: Upload Video
+        uses: actions/upload-artifact@v4
+        with:
+          name: ugc-promo-reel
+          path: learnthrill_promo_reel.mp4
