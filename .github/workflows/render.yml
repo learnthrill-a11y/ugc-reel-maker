@@ -8,20 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install Packages
+      - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
-          pip install moviepy Pillow edge-tts numpy
+          pip install edge-tts
 
-      - name: Run Video Generator
+      - name: Generate Reel Video
         run: python make_reel.py
 
       - name: Upload Video
